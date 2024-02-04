@@ -16,10 +16,10 @@ import {
 	API_KEY,
 } from './constants';
 import Header from './components/Header';
+import YouTubePlayer from './components/YoutubePlayer';
 import Movies from './pages/Movies';
 import Starred from './pages/Starred';
 import WatchLater from './pages/WatchLater';
-import YouTubePlayer from './components/YoutubePlayer';
 import './app.scss';
 
 const App = () => {
