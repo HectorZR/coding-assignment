@@ -4,7 +4,6 @@ import {
 	Route,
 	createSearchParams,
 	useSearchParams,
-	useNavigate,
 } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import 'reactjs-popup/dist/index.css';
@@ -15,18 +14,18 @@ import Movies from './pages/Movies';
 import Starred from './pages/Starred';
 import WatchLater from './pages/WatchLater';
 import './app.scss';
+import { useQueryParam } from './hooks/useQueryParam';
 
 const App = () => {
 	const state = useSelector((state) => state);
 	const { movies } = state;
 	const dispatch = useDispatch();
-	const [searchParams, setSearchParams] = useSearchParams();
-	const searchQuery = searchParams.get('search');
-	const navigate = useNavigate();
+	const [, setSearchParams] = useSearchParams();
+	const searchQuery = useQueryParam('search');
 
 	const getSearchResults = (query) => {
 		if (query !== '') {
-			dispatch(fetchMovies(`${ENDPOINT_SEARCH}&query=` + query));
+			dispatch(fetchMovies(`${ENDPOINT_SEARCH}&query=${query}`));
 			setSearchParams(createSearchParams({ search: query }));
 		} else {
 			dispatch(fetchMovies(ENDPOINT_DISCOVER));
@@ -35,29 +34,20 @@ const App = () => {
 	};
 
 	const searchMovies = (query) => {
-		navigate('/');
 		getSearchResults(query);
 	};
 
-	const getMovies = () => {
+	useEffect(() => {
 		if (searchQuery) {
 			dispatch(fetchMovies(`${ENDPOINT_SEARCH}&query=` + searchQuery));
 		} else {
 			dispatch(fetchMovies(ENDPOINT_DISCOVER));
 		}
-	};
-
-	useEffect(() => {
-		getMovies();
 	}, []);
 
 	return (
 		<div className="App">
-			<Header
-				searchMovies={searchMovies}
-				searchParams={searchParams}
-				setSearchParams={setSearchParams}
-			/>
+			<Header searchMovies={searchMovies} />
 
 			<div className="container">
 				<Routes>
