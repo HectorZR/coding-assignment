@@ -4,7 +4,7 @@ import Movie from '../components/Movie';
 import '../styles/starred.scss';
 import { SelectedMoviesLayout } from '../components/SelectedMoviesLayout';
 
-const Starred = ({ viewTrailer }) => {
+const Starred = () => {
 	const state = useSelector((state) => state);
 	const { starred } = state;
 	const { clearAllStarred } = starredSlice.actions;
@@ -13,15 +13,13 @@ const Starred = ({ viewTrailer }) => {
 	return (
 		<SelectedMoviesLayout
 			title="Starred Movies"
-			emptyListMessage="You have no starred movies."
+			emptyListMessage="There are no starred movies."
 			removeAllTitle="Remove all starred"
 			rootTestid="starred"
 			movieListTestid="starred-movies"
 			movies={starred.starredMovies}
 			onRemoveAll={() => dispatch(clearAllStarred())}
-			renderDetailComponent={(movie) => (
-				<Movie movie={movie} key={movie.id} viewTrailer={viewTrailer} />
-			)}
+			renderDetailComponent={(movie) => <Movie movie={movie} key={movie.id} />}
 		/>
 	);
 };

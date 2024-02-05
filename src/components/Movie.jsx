@@ -2,10 +2,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import starredSlice from '../data/starredSlice';
 import watchLaterSlice from '../data/watchLaterSlice';
 import placeholder from '../assets/not-found-500X750.jpeg';
+import { YoutubePlayerModal } from './YoutubePlayerModal';
 
-const Movie = ({ movie, viewTrailer, closeCard }) => {
-	const state = useSelector((state) => state);
-	const { starred, watchLater } = state;
+const Movie = ({ movie }) => {
+	const { starred, watchLater } = useSelector((state) => state);
 	const { starMovie, unstarMovie } = starredSlice.actions;
 	const { addToWatchLater, removeFromWatchLater } = watchLaterSlice.actions;
 
@@ -89,13 +89,7 @@ const Movie = ({ movie, viewTrailer, closeCard }) => {
 								<i className="bi bi-check"></i>
 							</button>
 						)}
-						<button
-							type="button"
-							className="btn btn-dark"
-							onClick={() => viewTrailer(movie)}
-						>
-							View Trailer
-						</button>
+						<YoutubePlayerModal movieId={movie.id} />
 					</div>
 					<img
 						className="center-block"

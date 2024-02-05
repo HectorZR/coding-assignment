@@ -4,7 +4,7 @@ import Movie from '../components/Movie';
 import '../styles/starred.scss';
 import { SelectedMoviesLayout } from '../components/SelectedMoviesLayout';
 
-const WatchLater = ({ viewTrailer }) => {
+const WatchLater = () => {
 	const state = useSelector((state) => state);
 	const { watchLater } = state;
 	const { remveAllWatchLater } = watchLaterSlice.actions;
@@ -19,9 +19,7 @@ const WatchLater = ({ viewTrailer }) => {
 			movieListTestid="watch-later-movies"
 			movies={watchLater.watchLaterMovies}
 			onRemoveAll={() => dispatch(remveAllWatchLater())}
-			renderDetailComponent={(movie) => (
-				<Movie movie={movie} key={movie.id} viewTrailer={viewTrailer} />
-			)}
+			renderDetailComponent={(movie) => <Movie movie={movie} key={movie.id} />}
 		/>
 	);
 };
