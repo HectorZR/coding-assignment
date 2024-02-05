@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import 'reactjs-popup/dist/index.css';
 import { fetchMovies } from './data/moviesSlice';
 import { ENDPOINT_SEARCH, ENDPOINT_DISCOVER } from './constants';
@@ -12,8 +12,6 @@ import './app.scss';
 import { useQueryParam } from './hooks/useQueryParam';
 
 const App = () => {
-	const state = useSelector((state) => state);
-	const { movies } = state;
 	const dispatch = useDispatch();
 	const searchQuery = useQueryParam('search');
 
@@ -31,7 +29,7 @@ const App = () => {
 
 			<div className="container">
 				<Routes>
-					<Route path="/" element={<Movies movies={movies} />} />
+					<Route path="/" element={<Movies />} />
 					<Route path="/starred" element={<Starred />} />
 					<Route path="/watch-later" element={<WatchLater />} />
 					<Route
