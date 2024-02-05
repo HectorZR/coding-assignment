@@ -1,20 +1,32 @@
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import {
+	Link,
+	NavLink,
+	createSearchParams,
+	useNavigate,
+	useSearchParams,
+} from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import '../styles/header.scss';
 
-const Header = ({ searchMovies }) => {
+const Header = () => {
 	const navigate = useNavigate();
+	const [, setSearchParams] = useSearchParams();
 	const { starredMovies } = useSelector((state) => state.starred);
 
 	const handleSearchMovies = (value) => {
 		navigate('/');
-		searchMovies(value);
+
+		if (value !== '') {
+			setSearchParams(createSearchParams({ search: value }));
+		} else {
+			setSearchParams();
+		}
 	};
 
 	return (
 		<header>
-			<Link to="/" data-testid="home" onClick={() => searchMovies('')}>
+			<Link to="/" data-testid="home" onClick={() => handleSearchMovies('')}>
 				<i className="bi bi-film" />
 			</Link>
 
