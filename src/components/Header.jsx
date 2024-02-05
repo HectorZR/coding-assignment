@@ -1,18 +1,15 @@
 import {
 	Link,
-	NavLink,
 	createSearchParams,
 	useNavigate,
 	useSearchParams,
 } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-
 import '../styles/header.scss';
+import { NavBar } from './NavBar';
 
 const Header = () => {
 	const navigate = useNavigate();
 	const [, setSearchParams] = useSearchParams();
-	const { starredMovies } = useSelector((state) => state.starred);
 
 	const handleSearchMovies = (value) => {
 		navigate('/');
@@ -30,25 +27,7 @@ const Header = () => {
 				<i className="bi bi-film" />
 			</Link>
 
-			<nav>
-				<NavLink
-					to="/starred"
-					data-testid="nav-starred"
-					className="nav-starred"
-				>
-					{starredMovies.length > 0 ? (
-						<>
-							<i className="bi bi-star-fill bi-star-fill-white" />
-							<sup className="star-number">{starredMovies.length}</sup>
-						</>
-					) : (
-						<i className="bi bi-star" />
-					)}
-				</NavLink>
-				<NavLink to="/watch-later" className="nav-fav">
-					watch later
-				</NavLink>
-			</nav>
+			<NavBar />
 
 			<div className="input-group rounded">
 				<Link

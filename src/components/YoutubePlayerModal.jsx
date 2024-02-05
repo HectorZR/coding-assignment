@@ -3,10 +3,11 @@ import '../styles/youtubePlayerModal.scss';
 import YoutubePlayer from './YoutubePlayer';
 import { useGetMovieTrailerByIdQuery } from '../services/movieApi';
 import { useState } from 'react';
+import { Loader } from './Loader';
 
 export const YoutubePlayerModal = ({ movieId }) => {
 	const [selectedId, setSelectedId] = useState('');
-	const { data: videoKey } = useGetMovieTrailerByIdQuery(movieId, {
+	const { data: videoKey, isLoading } = useGetMovieTrailerByIdQuery(movieId, {
 		skip: !selectedId,
 	});
 
@@ -28,7 +29,7 @@ export const YoutubePlayerModal = ({ movieId }) => {
 		>
 			{(close) => (
 				<section className="dialog-box">
-					<YoutubePlayer videoKey={videoKey} />
+					{isLoading ? <Loader /> : <YoutubePlayer videoKey={videoKey} />}
 					<div>
 						<button type="button" onClick={close}>
 							&times;
