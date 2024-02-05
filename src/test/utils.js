@@ -9,6 +9,15 @@ import starredSlice from '../data/starredSlice';
 import watchLaterSlice from '../data/watchLaterSlice';
 import { movieApi } from '../services/movieApi';
 
+beforeEach(() => {
+	window.IntersectionObserver = jest.fn(() => ({
+		observe: jest.fn(),
+		unobserve: jest.fn(),
+	}));
+
+	window.scrollTo = jest.fn();
+});
+
 export function renderWithProviders(
 	ui,
 	{

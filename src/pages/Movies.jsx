@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ENDPOINT_DISCOVER, ENDPOINT_SEARCH } from '../constants';
 import Movie from '../components/Movie';
@@ -8,32 +8,42 @@ import { useQueryParam } from '../hooks/useQueryParam';
 import { useInfiniteScroll } from '../hooks/useInfiniteScroll';
 import { fetchMovies } from '../data/moviesSlice';
 
+const MINIMUM_MOVIES_COUNT = 20;
+
 const Movies = () => {
 	const dispatch = useDispatch();
 	const { movies, nextPage, fetchStatus } = useSelector(
 		(state) => state.movies
 	);
 	const searchQuery = useQueryParam('search');
-
-	// I'm adding useEffect and useInfiniteScroll hooks here
-	// to restart pagination when the search query changes,
-	// because every time the search input is clicked, the component is mounted again.
-	useEffect(() => {
+	const getMoreMovies = useCallback(() => {
 		const url = searchQuery
-			? `${ENDPOINT_SEARCH}&query=${searchQuery}`
-			: ENDPOINT_DISCOVER;
+			? `${ENDPOINT_SEARCH}&query=${searchQuery}&page=${nextPage}`
+			: `${ENDPOINT_DISCOVER}&page=${nextPage}`;
 
 		dispatch(fetchMovies(url));
-	}, [searchQuery, dispatch]);
+	}, [searchQuery, nextPage, dispatch]);
 
-	useInfiniteScroll({
-		onReachedEnd: () => {
+	useEffect(
+		function getInitialMovieList() {
 			const url = searchQuery
-				? `${ENDPOINT_SEARCH}&query=${searchQuery}&page=${nextPage}`
-				: `${ENDPOINT_DISCOVER}&page=${nextPage}`;
+				? `${ENDPOINT_SEARCH}&query=${searchQuery}`
+				: ENDPOINT_DISCOVER;
 
 			dispatch(fetchMovies(url));
 		},
+		[searchQuery, dispatch]
+	);
+
+	useEffect(
+		function restartScroll() {
+			window.scrollTo(0, 0);
+		},
+		[searchQuery]
+	);
+
+	const elementRef = useInfiniteScroll({
+		onReachedEnd: getMoreMovies,
 	});
 
 	return (
@@ -44,7 +54,11 @@ const Movies = () => {
 				})}
 			</div>
 
-			{fetchStatus === 'loading' && <Loader />}
+			{movies.length >= MINIMUM_MOVIES_COUNT && (
+				<div className="loader-container" ref={elementRef}>
+					{fetchStatus === 'loading' && <Loader />}
+				</div>
+			)}
 		</div>
 	);
 };

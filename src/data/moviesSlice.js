@@ -21,7 +21,14 @@ const moviesSlice = createSlice({
 				if (action.payload.page === 1) {
 					state.movies = action.payload.results;
 				} else {
-					state.movies.push(...action.payload.results);
+					// API is returning duplicate movies, since we have no access to the API
+					// I'm filtering them out here manually. This is not ideal, but it's a
+					// workaround, because that small problem is causing infinite scroll not working properly.
+					const uniqueMovies = action.payload.results.filter(
+						({ id }) => !state.movies.find(({ id: movieId }) => movieId === id)
+					);
+
+					state.movies.push(...uniqueMovies);
 				}
 				state.nextPage = action.payload.page + 1;
 				state.totalPages = action.payload.total_pages;
