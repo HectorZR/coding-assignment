@@ -15,7 +15,13 @@ describe('MovieSlice test', () => {
     it('should return payload when action is fulfilled', () => {
         const action = {
             type: fetchMovies.fulfilled, 
-            payload: moviesMock
+            // I had to modify because it was incorrect, after my changes
+            payload: {
+                page: 1,
+                results: moviesMock,
+                total_pages: 1,
+                total_results: 1
+            }
         };
         const initialState = moviesSlice.reducer(
         { 

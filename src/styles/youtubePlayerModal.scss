@@ -1,0 +1,12 @@
+.dialog-box {
+	display: flex;
+	gap: 1rem;
+
+	button {
+		max-width: fit-content;
+	}
+
+	h6 {
+		padding: 30px;
+	}
+}
